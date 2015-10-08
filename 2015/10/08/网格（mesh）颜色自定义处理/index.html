@@ -3,15 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>UGUI动态加载图片 | Roar</title>
+  <title>网格（mesh）颜色自定义 | Roar</title>
   <meta name="author" content="Alex">
   
-  <meta name="description" content="UGUI相对2D toolkit淡化图集概念，给开发带来很多方便的同时，动态加载图片变得较为复杂">
+  <meta name="description" content="关于mesh，目前的理解还不太深刻。不知道这样简单理解对不对：mesh就是附于模型表面的三角形网格。
+在Unity中，通过修改mesh的相应顶点的color属性可以改变动态字体或者贴图的颜色。下面是文本颜色渐变的例子。
+using UnityEngine;
+using System.Collecti">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="UGUI动态加载图片"/>
+  <meta property="og:title" content="网格（mesh）颜色自定义"/>
   <meta property="og:site_name" content="Roar"/>
 
   
@@ -64,97 +67,99 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2015-09-17T02:59:55.000Z">
-          <a href="/2015/09/17/UGUI动态加载图片/">
-              2015-09-17
+        <time datetime="2015-10-08T06:17:03.000Z">
+          <a href="/2015/10/08/网格（mesh）颜色自定义处理/">
+              2015-10-08
           </a>
         </time>
       
       
   
-    <h1 class="title">UGUI动态加载图片</h1>
+    <h1 class="title">网格（mesh）颜色自定义</h1>
   
 
     </header>
     <div class="entry">
       
-        <p>UGUI相对2D toolkit淡化图集概念，给开发带来很多方便的同时，动态加载图片变得较为复杂<br><a id="more"></a></p>
-<p><a href="http://www.xuanyusong.com/archives/3304" target="_blank" rel="external">参考,UGUI研究院之全面理解图集与使用——雨松MOMO</a></p>
-<ol>
-<li><p>生成预设</p>
+        <a id="more"></a>
+<p>关于mesh，目前的理解还不太深刻。不知道这样简单理解对不对：mesh就是附于模型表面的三角形网格。</p>
+<p>在Unity中，通过修改mesh的相应顶点的color属性可以改变动态字体或者贴图的颜色。下面是文本颜色渐变的例子。</p>
 <pre><code><span class="keyword">using</span> UnityEngine;
-<span class="keyword">using</span> UnityEditor;
 <span class="keyword">using</span> System.Collections;
-<span class="keyword">using</span> System.IO;
-
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title">ImagePrefabEditor</span>{
-
-    [MenuItem (MenuTool.MenuRoot + <span class="string">"CreateImagePrefab"</span>)]
-    <span class="function"><span class="keyword">static</span> <span class="keyword">private</span> <span class="keyword">void</span> <span class="title">CreateImagePrefab</span>(<span class="params"></span>)
-    </span>{
-        <span class="keyword">string</span> spriteDir = Application.dataPath +<span class="string">"/Resources/Image"</span>;
-
-        <span class="keyword">if</span>(!Directory.Exists(spriteDir))
-        {
-            Directory.CreateDirectory(spriteDir);
-        }
-
-        DirectoryInfo rootDirInfo = <span class="keyword">new</span> DirectoryInfo(Application.dataPath +<span class="string">"/Image/Image_DynamicLoad"</span>);
-
-<span class="comment">//        foreach (DirectoryInfo dirInfo in rootDirInfo.GetDirectories())</span>
-
-        <span class="keyword">foreach</span> (FileInfo pngFile <span class="keyword">in</span>         rootDirInfo.GetFiles(<span class="string">"*.png"</span>,SearchOption.AllDirectories)) 
-        {
-            <span class="keyword">string</span> allPath = pngFile.FullName;
-            <span class="keyword">string</span> assetPath = allPath.Substring(allPath.IndexOf(<span class="string">"Assets"</span>));
-
-            Sprite sprite = AssetDatabase.LoadAssetAtPath&lt;Sprite&gt;(assetPath);
-            GameObject go = <span class="keyword">new</span> GameObject(sprite.name);
-            go.AddComponent&lt;SpriteRenderer&gt;().sprite = sprite;
-
-<span class="comment">//            Debug.Log("sprite: " + sprite.name);</span>
-
-            allPath = spriteDir+<span class="string">"/"</span>+sprite.name+<span class="string">".prefab"</span>;
-            <span class="keyword">string</span> prefabPath = allPath.Substring(allPath.IndexOf(<span class="string">"Assets"</span>));
-            PrefabUtility.CreatePrefab(prefabPath,go);
-            GameObject.DestroyImmediate(go);
-        }
-    }
-}
-</code></pre></li>
-<li><p>图片引用</p>
-<pre><code><span class="keyword">using</span> UnityEngine;
+<span class="keyword">using</span> System.Collections.Generic;
 <span class="keyword">using</span> UnityEngine.UI;
-<span class="keyword">using</span> System.Collections;
 
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title">ImageManager</span> : <span class="title">MonoBehaviour</span> {
+[AddComponentMenu(<span class="string">"UI/Effects/Gradient"</span>)]
+<span class="keyword">public</span> <span class="keyword">class</span> Gradient : BaseMeshEffect {
+    [SerializeField]
+    <span class="keyword">public</span> Color32 topColor = Color.white;
+    [SerializeField]
+    <span class="keyword">public</span> Color32 bottomColor = Color.black;
 
-    <span class="keyword">private</span> <span class="keyword">static</span> ImageManager instance;
-    <span class="keyword">public</span> <span class="keyword">static</span> ImageManager Instance
-    {
-        <span class="keyword">get</span>
+
+
+    <span class="comment">//    ModifyMesh是BaseMeshEffect的一个公有方法，对它进行重写</span>
+
+    <span class="function"><span class="keyword">public</span> override <span class="keyword">void</span> <span class="title">ModifyMesh</span><span class="params">(Mesh mesh)</span></span>{
+        <span class="keyword">if</span> (!IsActive()) {
+            <span class="keyword">return</span>;
+        }
+
+        <span class="comment">//获取网格上的点，保存在vertexList中</span>
+        List&lt;UIVertex&gt; vertexList = <span class="keyword">new</span> List&lt;UIVertex&gt;();
+        <span class="keyword">using</span> (VertexHelper vertexHelper = <span class="keyword">new</span> VertexHelper (mesh))
         {
-            <span class="keyword">if</span>(instance == <span class="keyword">null</span>)
-                instance = <span class="keyword">new</span> ImageManager();
+            vertexHelper.GetUIVertexStream (vertexList);
+        }
 
-            <span class="keyword">return</span> instance;
+        <span class="keyword">int</span> count = vertexList.Count;
+        <span class="keyword">if</span>(count&gt;<span class="number">0</span>){
+            <span class="comment">//注意，每个文字方块占6个点（两个三角形）</span>
+            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; i += <span class="number">6</span>) {
+
+                <span class="keyword">float</span> bottomY = vertexList[i].position.y;
+                <span class="keyword">float</span> topY = vertexList[i].position.y;
+
+                <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;  <span class="number">6</span>; j ++)
+                {
+                    <span class="keyword">float</span> y = vertexList[i+j].position.y;
+
+                    <span class="keyword">if</span> (y &gt; topY) {
+                        topY = y;
+                    }
+                    <span class="keyword">else</span> <span class="keyword">if</span> (y &lt; bottomY) {
+                        bottomY = y;
+                    }
+                }
+
+                <span class="keyword">float</span> uiElementHeight = topY - bottomY;
+                <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">6</span>; j++) {
+                    UIVertex uiVertex = vertexList[i+j];
+                    uiVertex.color = Color32.Lerp(bottomColor, topColor, (uiVertex.position.y - bottomY) / uiElementHeight);
+                    vertexList[i+j] = uiVertex;
+                }
+            }
+        }
+        <span class="comment">//将自定义后的顶点，重新填充到网格中去</span>
+        <span class="keyword">using</span> (VertexHelper vertexHelper2 = <span class="keyword">new</span> VertexHelper ())
+        {
+            vertexHelper2.AddUIVertexTriangleStream (vertexList);
+            vertexHelper2.FillMesh (mesh);
         }
     }
-
-    <span class="function"><span class="keyword">public</span> Sprite <span class="title">GetImage</span>(<span class="params"><span class="keyword">string</span> name</span>)
-    </span>{
-        <span class="keyword">return</span> Resources.Load&lt;GameObject&gt;(<span class="string">"Image/"</span> + name).GetComponent&lt;SpriteRenderer&gt;().sprite;
-    }
 }
-</code></pre></li>
-</ol>
-
+</code></pre>
       
     </div>
     <footer>
       
         
         
+  
+  <div class="tags">
+    <a href="/tags/mesh-文本颜色渐变，图片颜色渐变/">mesh,文本颜色渐变，图片颜色渐变</a>
+  </div>
+
         
   <div class="addthis addthis_toolbox addthis_default_style">
     
