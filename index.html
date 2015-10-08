@@ -77,74 +77,7 @@
     </header>
     <div class="entry">
       
-        <a id="more"></a>
-<p>关于mesh，目前的理解还不太深刻。不知道这样简单理解对不对：mesh就是附于模型表面的三角形网格。</p>
-<p>在Unity中，通过修改mesh的相应顶点的color属性可以改变动态字体或者贴图的颜色。下面是文本颜色渐变的例子。</p>
-<pre><code><span class="keyword">using</span> UnityEngine;
-<span class="keyword">using</span> System.Collections;
-<span class="keyword">using</span> System.Collections.Generic;
-<span class="keyword">using</span> UnityEngine.UI;
-
-[AddComponentMenu(<span class="string">"UI/Effects/Gradient"</span>)]
-<span class="keyword">public</span> <span class="keyword">class</span> Gradient : BaseMeshEffect {
-    [SerializeField]
-    <span class="keyword">public</span> Color32 topColor = Color.white;
-    [SerializeField]
-    <span class="keyword">public</span> Color32 bottomColor = Color.black;
-
-
-
-    <span class="comment">//    ModifyMesh是BaseMeshEffect的一个公有方法，对它进行重写</span>
-
-    <span class="function"><span class="keyword">public</span> override <span class="keyword">void</span> <span class="title">ModifyMesh</span><span class="params">(Mesh mesh)</span></span>{
-        <span class="keyword">if</span> (!IsActive()) {
-            <span class="keyword">return</span>;
-        }
-
-        <span class="comment">//获取网格上的点，保存在vertexList中</span>
-        List&lt;UIVertex&gt; vertexList = <span class="keyword">new</span> List&lt;UIVertex&gt;();
-        <span class="keyword">using</span> (VertexHelper vertexHelper = <span class="keyword">new</span> VertexHelper (mesh))
-        {
-            vertexHelper.GetUIVertexStream (vertexList);
-        }
-
-        <span class="keyword">int</span> count = vertexList.Count;
-        <span class="keyword">if</span>(count&gt;<span class="number">0</span>){
-            <span class="comment">//注意，每个文字方块占6个点（两个三角形）</span>
-            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; i += <span class="number">6</span>) {
-
-                <span class="keyword">float</span> bottomY = vertexList[i].position.y;
-                <span class="keyword">float</span> topY = vertexList[i].position.y;
-
-                <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;  <span class="number">6</span>; j ++)
-                {
-                    <span class="keyword">float</span> y = vertexList[i+j].position.y;
-
-                    <span class="keyword">if</span> (y &gt; topY) {
-                        topY = y;
-                    }
-                    <span class="keyword">else</span> <span class="keyword">if</span> (y &lt; bottomY) {
-                        bottomY = y;
-                    }
-                }
-
-                <span class="keyword">float</span> uiElementHeight = topY - bottomY;
-                <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">6</span>; j++) {
-                    UIVertex uiVertex = vertexList[i+j];
-                    uiVertex.color = Color32.Lerp(bottomColor, topColor, (uiVertex.position.y - bottomY) / uiElementHeight);
-                    vertexList[i+j] = uiVertex;
-                }
-            }
-        }
-        <span class="comment">//将自定义后的顶点，重新填充到网格中去</span>
-        <span class="keyword">using</span> (VertexHelper vertexHelper2 = <span class="keyword">new</span> VertexHelper ())
-        {
-            vertexHelper2.AddUIVertexTriangleStream (vertexList);
-            vertexHelper2.FillMesh (mesh);
-        }
-    }
-}
-</code></pre>
+        <p>关于mesh，目前的理解还不太深刻。不知道这样简单理解对不对：mesh就是附于模型表面的三角形网格。<br>
       
     </div>
     <footer>
