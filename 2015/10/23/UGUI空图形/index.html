@@ -3,13 +3,15 @@
 <head>
   <meta charset="utf-8">
   
-  <title>归档：2015 | Roar</title>
+  <title>UGUI空图形 | Roar</title>
   <meta name="author" content="Alex">
+  
+  <meta name="description" content="UGUI按钮事件不像2D ToolKit使用碰撞体检测，而是采用射线检测。这样有一个问题，默认按钮触发区域不能超过image大小。暂知解决方法有：加入空图形，或者在按钮在加个Alpha为零的大图片。这里是空图的实现。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  
+  <meta property="og:title" content="UGUI空图形"/>
   <meta property="og:site_name" content="Roar"/>
 
   
@@ -44,73 +46,113 @@
 <div class="clearfix"></div></div>
   </header>
   <div id="content" class="inner">
-    <div id="main-col" class="alignleft"><div id="wrapper">
-<h2 class="archive-title">2015</h2>
-
-
-  <div class="archive">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
     
-      <article class="post">
-        <div class="post-content">
-          <header>
-            <div class="icon"></div>
-            <time datetime="2015-10-26T08:03:31.000Z"><a href="/2015/10/26/UGUI按钮监听（仿NGUI）/">2015-10-26</a></time>
-            
-              <h1 class="title"><a href="/2015/10/26/UGUI按钮监听（仿NGUI）/">UGUI按钮监听（仿NGUI）</a></h1>
-            
-          </header>
-        </div>
-      </article>
-    
-      <article class="post">
-        <div class="post-content">
-          <header>
-            <div class="icon"></div>
-            <time datetime="2015-10-23T03:43:12.000Z"><a href="/2015/10/23/UGUI空图形/">2015-10-23</a></time>
-            
-              <h1 class="title"><a href="/2015/10/23/UGUI空图形/">UGUI空图形</a></h1>
-            
-          </header>
-        </div>
-      </article>
-    
-      <article class="post">
-        <div class="post-content">
-          <header>
-            <div class="icon"></div>
-            <time datetime="2015-10-08T06:17:03.000Z"><a href="/2015/10/08/网格（mesh）颜色自定义处理/">2015-10-08</a></time>
-            
-              <h1 class="title"><a href="/2015/10/08/网格（mesh）颜色自定义处理/">网格（mesh）颜色自定义</a></h1>
-            
-          </header>
-        </div>
-      </article>
-    
-      <article class="post">
-        <div class="post-content">
-          <header>
-            <div class="icon"></div>
-            <time datetime="2015-09-17T02:59:55.000Z"><a href="/2015/09/17/UGUI动态加载图片/">2015-09-17</a></time>
-            
-              <h1 class="title"><a href="/2015/09/17/UGUI动态加载图片/">UGUI动态加载图片</a></h1>
-            
-          </header>
-        </div>
-      </article>
-    
-      <article class="post">
-        <div class="post-content">
-          <header>
-            <div class="icon"></div>
-            <time datetime="2015-09-16T03:59:07.000Z"><a href="/2015/09/16/总想静下心来写点什么/">2015-09-16</a></time>
-            
-              <h1 class="title"><a href="/2015/09/16/总想静下心来写点什么/">总想静下心来写点什么</a></h1>
-            
-          </header>
-        </div>
-      </article>
+      <img src="">
     
   </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2015-10-23T03:43:12.000Z">
+          <a href="/2015/10/23/UGUI空图形/">
+              2015-10-23
+          </a>
+        </time>
+      
+      
+  
+    <h1 class="title">UGUI空图形</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>UGUI按钮事件不像2D ToolKit使用碰撞体检测，而是采用射线检测。这样有一个问题，默认按钮触发区域不能超过image大小。暂知解决方法有：加入空图形，或者在按钮在加个Alpha为零的大图片。这里是空图的实现。<br><a id="more"></a></p>
+<pre><code><span class="keyword">using</span> UnityEngine;
+<span class="keyword">using</span> UnityEngine.UI;
+<span class="keyword">using</span> System.Collections;
+<span class="keyword">using</span> System.Collections.Generic;
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title">EmptyGraphic</span> : <span class="title">Graphic</span> {
+    <span class="function"><span class="keyword">protected</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">OnPopulateMesh</span>(<span class="params">Mesh m</span>)
+    </span>{
+        m.Clear(<span class="keyword">false</span>); <span class="comment">// Clears all vertex data and all triangle indices.</span>
+    }
+}
+</code></pre><p>OnPopulateMesh(Mesh m) 是Uinty 5.2新加的API，旧API为OnFillVBO(List<uivertex> vbo)</uivertex></p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+  
+  <div class="tags">
+    <a href="/tags/Button/">Button</a>, <a href="/tags/Image/">Image</a>, <a href="/tags/UGUI/">UGUI</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <!-- JiaThis Button BEGIN -->
+    <div class="jiathis_style">
+        <span class="jiathis_txt">分享到：</span>
+        <a class="jiathis_button_icons_1"></a>
+        <a class="jiathis_button_icons_2"></a>
+        <a class="jiathis_button_icons_3"></a>
+        <a class="jiathis_button_icons_4"></a>
+        <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+        <a class="jiathis_counter_style"></a>
+    </div>
+    <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js" charset="utf-8"></script>
+    <!-- JiaThis Button END -->
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+      <!-- Duoshuo Comment BEGIN -->
+<div class="ds-thread"></div>
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"moo123"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+</script>
+<!-- Duoshuo Comment END -->
+  
+</section>
 </div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">

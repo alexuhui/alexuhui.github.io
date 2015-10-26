@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   
-  <title>UGUI按钮监听（仿NGUI） | Roar</title>
+  <title>UGUI动态加载图片 | Roar</title>
   <meta name="author" content="Alex">
   
-  <meta name="description" content="UGUI提供了可重写的事件触发方法。在UGUI默认的方法里，直接在Inspector拖拽GameObject，并设置相应的触发函数。当Button数量很多，或者一个Button触发的事件很多时，这是一个很繁琐的过程。另外，修改起来也不方便。参考MOMO的《UGUI研究院之控件以及按钮的监听事件系统》提供一种比较方便的监听方法">
+  <meta name="description" content="UGUI相对2D toolkit淡化图集概念，给开发带来很多方便的同时，动态加载图片变得较为复杂">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="UGUI按钮监听（仿NGUI）"/>
+  <meta property="og:title" content="UGUI动态加载图片"/>
   <meta property="og:site_name" content="Roar"/>
 
   
@@ -64,68 +64,91 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2015-10-26T08:03:31.000Z">
-          <a href="/2015/10/26/UGUI按钮监听（仿NGUI）/">
-              2015-10-26
+        <time datetime="2015-09-17T02:59:55.000Z">
+          <a href="/2015/09/17/UGUI动态加载图片/">
+              2015-09-17
           </a>
         </time>
       
       
   
-    <h1 class="title">UGUI按钮监听（仿NGUI）</h1>
+    <h1 class="title">UGUI动态加载图片</h1>
   
 
     </header>
     <div class="entry">
       
-        <p>UGUI提供了可重写的事件触发方法。在UGUI默认的方法里，直接在Inspector拖拽GameObject，并设置相应的触发函数。当Button数量很多，或者一个Button触发的事件很多时，这是一个很繁琐的过程。另外，修改起来也不方便。参考MOMO的<a href="http://www.xuanyusong.com/archives/3325" target="_blank" rel="external">《UGUI研究院之控件以及按钮的监听事件系统》</a>提供一种比较方便的监听方法<br><a id="more"></a></p>
-<p><a href="http://docs.unity3d.com/460/Documentation/Manual/SupportedEvents.html" target="_blank" rel="external">更多事件参考官方文档的Supported Events</a></p>
-<p>继承引擎的EventTrigger类，并重写需要监听的事件</p>
+        <p>UGUI相对2D toolkit淡化图集概念，给开发带来很多方便的同时，动态加载图片变得较为复杂<br><a id="more"></a></p>
+<p><a href="http://www.xuanyusong.com/archives/3304" target="_blank" rel="external">参考,UGUI研究院之全面理解图集与使用——雨松MOMO</a></p>
+<ol>
+<li><p>生成预设</p>
 <pre><code><span class="keyword">using</span> UnityEngine;
+<span class="keyword">using</span> UnityEditor;
 <span class="keyword">using</span> System.Collections;
-<span class="keyword">using</span> UnityEngine.EventSystems;
-<span class="keyword">public</span> <span class="keyword">class</span> EventTriggerListener : UnityEngine.EventSystems.EventTrigger{
+<span class="keyword">using</span> System.IO;
 
-    <span class="function"><span class="keyword">public</span> delegate <span class="keyword">void</span> <span class="title">EventDelegate</span> <span class="params">(GameObject go)</span></span>;
-    <span class="keyword">public</span> EventDelegate onClick;
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title">ImagePrefabEditor</span>{
 
-    <span class="function"><span class="keyword">static</span> <span class="keyword">public</span> EventTriggerListener <span class="title">Get</span> <span class="params">(GameObject go)</span>
+    [MenuItem (MenuTool.MenuRoot + <span class="string">"CreateImagePrefab"</span>)]
+    <span class="function"><span class="keyword">static</span> <span class="keyword">private</span> <span class="keyword">void</span> <span class="title">CreateImagePrefab</span>(<span class="params"></span>)
     </span>{
-        EventTriggerListener listener = go.GetComponent&lt;EventTriggerListener&gt;();
-        <span class="keyword">if</span> (listener == null) listener = go.AddComponent&lt;EventTriggerListener&gt;();
-            <span class="keyword">return</span> listener;
-    }
+        <span class="keyword">string</span> spriteDir = Application.dataPath +<span class="string">"/Resources/Image"</span>;
 
-    <span class="function"><span class="keyword">public</span> override <span class="keyword">void</span> <span class="title">OnPointerClick</span><span class="params">(PointerEventData eventData)</span>
-    </span>{
-        <span class="keyword">if</span>(onClick != null)
-            onClick(gameObject);
+        <span class="keyword">if</span>(!Directory.Exists(spriteDir))
+        {
+            Directory.CreateDirectory(spriteDir);
+        }
+
+        DirectoryInfo rootDirInfo = <span class="keyword">new</span> DirectoryInfo(Application.dataPath +<span class="string">"/Image/Image_DynamicLoad"</span>);
+
+<span class="comment">//        foreach (DirectoryInfo dirInfo in rootDirInfo.GetDirectories())</span>
+
+        <span class="keyword">foreach</span> (FileInfo pngFile <span class="keyword">in</span>         rootDirInfo.GetFiles(<span class="string">"*.png"</span>,SearchOption.AllDirectories)) 
+        {
+            <span class="keyword">string</span> allPath = pngFile.FullName;
+            <span class="keyword">string</span> assetPath = allPath.Substring(allPath.IndexOf(<span class="string">"Assets"</span>));
+
+            Sprite sprite = AssetDatabase.LoadAssetAtPath&lt;Sprite&gt;(assetPath);
+            GameObject go = <span class="keyword">new</span> GameObject(sprite.name);
+            go.AddComponent&lt;SpriteRenderer&gt;().sprite = sprite;
+
+<span class="comment">//            Debug.Log("sprite: " + sprite.name);</span>
+
+            allPath = spriteDir+<span class="string">"/"</span>+sprite.name+<span class="string">".prefab"</span>;
+            <span class="keyword">string</span> prefabPath = allPath.Substring(allPath.IndexOf(<span class="string">"Assets"</span>));
+            PrefabUtility.CreatePrefab(prefabPath,go);
+            GameObject.DestroyImmediate(go);
+        }
     }
 }
-</code></pre><p>将Button触发的事件赋值给相应实例的委托</p>
+</code></pre></li>
+<li><p>图片引用</p>
 <pre><code><span class="keyword">using</span> UnityEngine;
+<span class="keyword">using</span> UnityEngine.UI;
 <span class="keyword">using</span> System.Collections;
 
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title">ButtonTest</span> : <span class="title">MonoBehaviour</span> {
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title">ImageManager</span> : <span class="title">MonoBehaviour</span> {
 
-    <span class="keyword">public</span> GameObject goBtn1, goBtn2;
+    <span class="keyword">private</span> <span class="keyword">static</span> ImageManager instance;
+    <span class="keyword">public</span> <span class="keyword">static</span> ImageManager Instance
+    {
+        <span class="keyword">get</span>
+        {
+            <span class="keyword">if</span>(instance == <span class="keyword">null</span>)
+                instance = <span class="keyword">new</span> ImageManager();
 
-    <span class="comment">// Use this for initialization</span>
-    <span class="function"><span class="keyword">void</span> <span class="title">Start</span> (<span class="params"></span>) </span>{
-
-        EventTriggerListener.Get(goBtn1).onClick = ButtonOnClick;
-        EventTriggerListener.Get(goBtn2).onClick = ButtonOnClick;
+            <span class="keyword">return</span> instance;
+        }
     }
 
-    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ButtonOnClick</span>(<span class="params">GameObject go</span>)
+    <span class="function"><span class="keyword">public</span> Sprite <span class="title">GetImage</span>(<span class="params"><span class="keyword">string</span> name</span>)
     </span>{
-        <span class="keyword">if</span>(go == goBtn1)
-            Debug.Log(<span class="string">"button -- 1"</span>);
-        <span class="keyword">if</span>(go == goBtn2)
-            Debug.Log(<span class="string">"button -- 2"</span>);
+        <span class="keyword">return</span> Resources.Load&lt;GameObject&gt;(<span class="string">"Image/"</span> + name).GetComponent&lt;SpriteRenderer&gt;().sprite;
     }
 }
-</code></pre>
+</code></pre></li>
+</ol>
+
       
     </div>
     <footer>
@@ -134,7 +157,7 @@
         
   
   <div class="tags">
-    <a href="/tags/Button/">Button</a>, <a href="/tags/UGUI/">UGUI</a>
+    <a href="/tags/Image/">Image</a>, <a href="/tags/UGUI/">UGUI</a>, <a href="/tags/图集/">图集</a>
   </div>
 
         
