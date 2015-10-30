@@ -1,0 +1,404 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>新建博客 | Roar</title>
+  <meta name="author" content="Alex">
+  
+  <meta name="description" content="在单机游戏发布中，对游戏安装包的大小往往会有要求，满足质量要求的情况下越小越好。游戏中往往会引入第三方字体库，字体包的大小是影响APK大小不可忽略的部分。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="新建博客"/>
+  <meta property="og:site_name" content="Roar"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Roar" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+<body>
+  <header id="header" class='normal_mode'>
+    <div class="inner"><div class="alignleft">
+  <h1><a href="/"><img class="logo" src="/css/img/logo.png"/>Roar</a></h1>
+  <h2><a href="/">造梦大师，似空非空</a></h2>
+</div>
+<nav id="main-nav">
+  <ul>
+    
+      <li><a href="/">博客</a></li>
+    
+      <li><a href="/archives">存档</a></li>
+    
+      <li><a href="/about">关于</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></div>
+  </header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2015-10-30T09:41:41.000Z">
+          <a href="/2015/10/30/游戏项目中文的字提取/">
+              2015-10-30
+          </a>
+        </time>
+      
+      
+  
+    <h1 class="title">新建博客</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>在单机游戏发布中，对游戏安装包的大小往往会有要求，满足质量要求的情况下越小越好。游戏中往往会引入第三方字体库，字体包的大小是影响APK大小不可忽略的部分。<br><a id="more"></a></p>
+<p>下面参考<a href="http://www.xuanyusong.com/archives/2987" target="_blank" rel="external">MOMO的Unity3D研究院之多语言用中文做KEY（七十五）</a>给出一种提取游戏中文字的方法。</p>
+<p>主要介绍下面几类提取方法</p>
+<ul>
+<li>预设中文字提取</li>
+<li>文本文件中文字提取</li>
+<li>脚本中中文提取</li>
+</ul>
+<p>预设中的文字获取的主要思想就是获取预设中的文本组件，然后获取文本组件上的文字。这里以UGUI的Text为例说明。</p>
+<pre><code><span class="keyword">using</span> UnityEngine;
+<span class="keyword">using</span> UnityEngine.UI;
+<span class="keyword">using</span> System.Collections;
+<span class="keyword">using</span> UnityEditor;
+<span class="keyword">using</span> System.Collections.Generic;
+<span class="keyword">using</span> System.IO;
+<span class="keyword">using</span> System.Text;
+<span class="keyword">using</span> System.Text.RegularExpressions;
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title">ChineseCollection</span> : <span class="title">Editor</span> {
+
+    <span class="comment">//Prefabs文件目录</span>
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">string</span> UIPrefabPath = Application.dataPath + <span class="string">"/Prefabs"</span>;
+    <span class="comment">//导出文本保存路径</span>
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">string</span> OutPath = Application.dataPath +<span class="string">"/TEXT.txt"</span>;
+
+    <span class="comment">//避免重复</span>
+    <span class="keyword">private</span> <span class="keyword">static</span> List&lt;<span class="keyword">string</span>&gt;Localization = <span class="keyword">null</span>;
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">string</span> staticWriteText = <span class="string">""</span>;
+
+    [MenuItem(<span class="string">"UITools/提取中文"</span>)]
+    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">ExportChinese</span>(<span class="params"></span>)
+    </span>{
+        Localization = <span class="keyword">new</span> List&lt;<span class="keyword">string</span>&gt;();
+        staticWriteText =<span class="string">""</span>;
+
+        <span class="comment">//遍历路径上的所有同类对象</span>
+        LoadDiectoryPrefab(<span class="keyword">new</span> DirectoryInfo(UIPrefabPath));
+
+        <span class="comment">//最终把提取的中文生成出来</span>
+        <span class="keyword">string</span> textPath = OutPath;
+        <span class="keyword">if</span> (System.IO.File.Exists (textPath)) 
+        {
+            File.Delete (textPath);
+        }
+        <span class="comment">//以一种特定的编码向流中写入字符</span>
+        <span class="keyword">using</span>(StreamWriter writer = <span class="keyword">new</span> StreamWriter(textPath, <span class="keyword">false</span>, Encoding.UTF8))
+        {
+            writer.Write(staticWriteText);
+        }
+        AssetDatabase.Refresh();
+        Debug.Log(<span class="string">"提取完成"</span>);
+    }
+
+    <span class="comment">//预设文件遍历</span>
+    <span class="function"><span class="keyword">static</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">LoadDiectoryPrefab</span>(<span class="params">DirectoryInfo dictoryInfo</span>)
+    </span>{
+        <span class="keyword">if</span>(!dictoryInfo.Exists)   <span class="keyword">return</span>;
+        FileInfo[] fileInfos = dictoryInfo.GetFiles(<span class="string">"*.prefab"</span>, SearchOption.AllDirectories);
+        <span class="keyword">foreach</span> (FileInfo files <span class="keyword">in</span> fileInfos)
+        {
+            <span class="keyword">string</span> path = files.FullName;
+            <span class="keyword">string</span> assetPath =  path.Substring(path.IndexOf(<span class="string">"Assets/"</span>));
+            GameObject prefab = AssetDatabase.LoadAssetAtPath(assetPath, <span class="keyword">typeof</span>(GameObject)) <span class="keyword">as</span> GameObject;
+            GameObject instance = GameObject.Instantiate(prefab) <span class="keyword">as</span> GameObject;
+            SearchPrefabString(instance.transform);
+            GameObject.DestroyImmediate(instance);
+        }
+    }
+
+    <span class="comment">//提取Prefab上的中文</span>
+    <span class="function"><span class="keyword">static</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SearchPrefabString</span>(<span class="params">Transform tran</span>)
+    </span>{
+        Text label = tran.GetComponent&lt;Text&gt;();
+
+        <span class="keyword">if</span>(label != <span class="keyword">null</span>)
+        {    
+            <span class="keyword">string</span> text = label.text;
+            Debug.Log(text);
+            <span class="keyword">if</span>(!Localization.Contains(text) &amp;&amp; !<span class="keyword">string</span>.IsNullOrEmpty(text)){
+                Localization.Add(text);
+                text = text.Replace(<span class="string">"\n"</span>,<span class="string">""</span>);
+                staticWriteText +＝ text;
+            }
+        }
+        <span class="keyword">foreach</span>(Transform chind <span class="keyword">in</span> tran)
+        {
+            SearchPrefabString(chind);
+        }
+    }
+}
+</code></pre><p>文本文件中文字提取只要逐个读取文本文件上的文本即可</p>
+<pre><code><span class="comment">//文本类文件遍历</span>
+<span class="function"><span class="keyword">static</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">LoadDiectoryTxt</span>(<span class="params">DirectoryInfo dictoryInfo</span>)
+</span>{
+    <span class="keyword">if</span>(!dictoryInfo.Exists)   <span class="keyword">return</span>;
+    FileInfo[] fileInfos = dictoryInfo.GetFiles(<span class="string">"*.txt"</span>, SearchOption.AllDirectories);
+    <span class="keyword">foreach</span> (FileInfo files <span class="keyword">in</span> fileInfos) 
+    {
+        <span class="keyword">string</span> path = files.FullName;
+        <span class="keyword">string</span> assetPath =  path.Substring(path.IndexOf(<span class="string">"Assets/"</span>));
+        TextAsset textAsset = AssetDatabase.LoadAssetAtPath(assetPath, <span class="keyword">typeof</span>(TextAsset)) <span class="keyword">as</span> TextAsset;
+        <span class="keyword">string</span> text = textAsset.text;
+        staticWriteText += text;
+    }
+}
+</code></pre><p>脚本中中文提取。最暴力的方式就是按提取文本文件的方式来提取脚本中的文本，当然这样提取出来的文本会一大坨，因为项目中会有大量的代码。脚本中最多的当然是26个英文字母，可以先不管它。只要遍历脚本文件，然后提取其中的中文并保存下来即可。LoadDiectoryCS方法和文本类的基本一样，只是把获取的Text再用GetChinese方法把其中的中文提取出来而已。关于正则表达式，还不是很明白。后续再研究。</p>
+<pre><code><span class="comment">//C#代码遍历</span>
+<span class="function"><span class="keyword">static</span> <span class="keyword">public</span>  <span class="keyword">void</span>  <span class="title">LoadDiectoryCS</span>(<span class="params">DirectoryInfo dictoryInfo</span>)
+</span>{
+
+    <span class="keyword">if</span>(!dictoryInfo.Exists) <span class="keyword">return</span>;
+    FileInfo[] fileInfos = dictoryInfo.GetFiles(<span class="string">"*.cs"</span>, SearchOption.AllDirectories);
+    <span class="keyword">foreach</span> (FileInfo files <span class="keyword">in</span> fileInfos)
+    {
+        <span class="keyword">string</span> path = files.FullName;
+        <span class="keyword">string</span> assetPath =  path.Substring(path.IndexOf(<span class="string">"Assets/"</span>));
+        TextAsset textAsset = AssetDatabase.LoadAssetAtPath(assetPath, <span class="keyword">typeof</span>(TextAsset)) <span class="keyword">as</span> TextAsset;
+        <span class="keyword">string</span> text = textAsset.text;
+        GetChinese(text);
+    }
+}
+
+<span class="function"><span class="keyword">static</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GetChinese</span>(<span class="params"><span class="keyword">string</span> str</span>)
+</span>{
+    <span class="comment">//用正则表达式提取双引号中的内容。</span>
+    Regex reg =  <span class="keyword">new</span> Regex(<span class="string">"\"[^\"]*\""</span>);
+    <span class="comment">//在指定的输入字符串中搜索 Regex 构造函数中指定的正则表达式的第一个匹配项</span>
+    MatchCollection mc = reg.Matches(str);
+    <span class="keyword">foreach</span>(Match m <span class="keyword">in</span> mc)
+    {
+        <span class="keyword">string</span> format = m.Value;
+        format = format.Replace(<span class="string">"\""</span>,<span class="string">""</span>);
+        <span class="comment">//用正则表达式提取双引号中中文。</span>
+        Regex reg1 =   <span class="keyword">new</span> Regex(<span class="string">"[\u4e00-\u9fa5]+"</span>);
+        MatchCollection mc1 = reg1.Matches(format);
+        <span class="keyword">foreach</span>(Match mt <span class="keyword">in</span> mc1)
+        {
+            format = mt.Value;
+            <span class="keyword">if</span>(!Localization.Contains(format) &amp;&amp; !<span class="keyword">string</span>.IsNullOrEmpty(format)){
+                Localization.Add(format);
+                staticWriteText+=format+<span class="string">"\n"</span>;
+            }
+        }
+    }
+}
+</code></pre>
+      
+    </div>
+    <footer>
+      
+        
+        
+  
+  <div class="tags">
+    <a href="/tags/UGUI/">UGUI</a>, <a href="/tags/文字提取/">文字提取</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <!-- JiaThis Button BEGIN -->
+    <div class="jiathis_style">
+        <span class="jiathis_txt">分享到：</span>
+        <a class="jiathis_button_icons_1"></a>
+        <a class="jiathis_button_icons_2"></a>
+        <a class="jiathis_button_icons_3"></a>
+        <a class="jiathis_button_icons_4"></a>
+        <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+        <a class="jiathis_counter_style"></a>
+    </div>
+    <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js" charset="utf-8"></script>
+    <!-- JiaThis Button END -->
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+      <!-- Duoshuo Comment BEGIN -->
+<div class="ds-thread"></div>
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"moo123"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+</script>
+<!-- Duoshuo Comment END -->
+  
+</section>
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:alexuhui.github.io">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">最新文章</h3>
+  <ul class="entry">
+    
+      <li>
+        <a href="/2015/10/30/游戏项目中文的字提取/">新建博客</a>
+      </li>
+    
+      <li>
+        <a href="/2015/10/26/UGUI按钮监听（仿NGUI）/">UGUI按钮监听（仿NGUI）</a>
+      </li>
+    
+      <li>
+        <a href="/2015/10/23/UGUI空图形/">UGUI空图形</a>
+      </li>
+    
+      <li>
+        <a href="/2015/10/08/网格（mesh）颜色自定义处理/">网格（mesh）颜色自定义</a>
+      </li>
+    
+      <li>
+        <a href="/2015/09/17/UGUI动态加载图片/">UGUI动态加载图片</a>
+      </li>
+    
+  </ul>
+</div>
+
+
+  
+
+  
+<div class="widget tag">
+  <h3 class="title">标签</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Button/">Button</a><small>2</small></li>
+  
+    <li><a href="/tags/Color/">Color</a><small>1</small></li>
+  
+    <li><a href="/tags/Image/">Image</a><small>2</small></li>
+  
+    <li><a href="/tags/Text/">Text</a><small>1</small></li>
+  
+    <li><a href="/tags/UGUI/">UGUI</a><small>4</small></li>
+  
+    <li><a href="/tags/mesh/">mesh</a><small>1</small></li>
+  
+    <li><a href="/tags/图集/">图集</a><small>1</small></li>
+  
+    <li><a href="/tags/文字提取/">文字提取</a><small>1</small></li>
+  
+    <li><a href="/tags/随想/">随想</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2015 Alex
+  
+  
+    <a class="icon github" href="https://github.com/yunlzheng">github</a>
+    <a href="http://weibo.com/503error">weibo</a>
+    <a href="http://www.google.com">google+</a>
+  
+</div>
+
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+    <script type="text/javascript">
+        (function(){
+
+            $(window).scroll(function(){
+
+                var scrollTop = $(window).scrollTop();
+                if ( scrollTop >200 ){
+                    $("#header").removeClass('normal_mode').addClass('top_mode');
+                } else{
+                    $("#header").removeClass('top_mode').addClass('normal_mode');
+                }
+
+            });
+
+        })();
+    </script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
