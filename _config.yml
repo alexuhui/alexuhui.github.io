@@ -8,12 +8,13 @@ subtitle: ''
 description: ''
 keywords:
 author: 一把栗子
-language: cn
+language: zh-CN
 timezone: 'Asia/Shanghai'
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
 url: https://alexuhui.github.io
+root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
