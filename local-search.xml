@@ -8,9 +8,25 @@
     <link href="/2022/09/22/test-article/"/>
     <url>/2022/09/22/test-article/</url>
     
-    <content type="html"><![CDATA[]]></content>
+    <content type="html"><![CDATA[<p>这是一篇测试文章</p>]]></content>
     
     
+    <categories>
+      
+      <category>Diary</category>
+      
+      <category>pp</category>
+      
+      <category>cc</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>测试的</tag>
+      
+    </tags>
     
   </entry>
   
