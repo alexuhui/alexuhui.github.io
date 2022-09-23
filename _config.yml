@@ -106,4 +106,4 @@ deploy:
   type: git
   repository:
     github: git@github.com:alexuhui/alexuhui.github.io.git
-  branch: master
+  branch: main
