@@ -1,4 +1,2 @@
 https://alexuhui.github.io/about/index.html
-https://alexuhui.github.io/2022/09/22/test-article/
-https://alexuhui.github.io/2022/09/20/hello-world/
 https://alexuhui.github.io/
