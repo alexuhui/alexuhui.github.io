@@ -1,7 +1,7 @@
 ---
 title: 判断圆与矩形相交
-index_img: /posts_img/math-rect_circle_intersect/index.jpg
-banner_img: /posts_img/math-rect_circle_intersect/banner.jpg
+index_img: /posts_img/math-rect-circle-intersect/index.jpg
+banner_img: /posts_img/math-rect-circle-intersect/banner.jpg
 categories:
   - 数学
   - 几何
@@ -16,7 +16,7 @@ date: 2022-09-25 17:50:35
 ### 1.边和坐标轴平行的矩形和圆相交的情况
 #### 方法1：通过找到相交和相离的边界条件。再推广到一般情况。<br>
 这种方法很直觉，很好理解。如下图1：<br>
-![图1：圆与矩形关系边界条件](CircleRectInsert.png) <br>
+![图1：圆与矩形关系边界条件](CircleRectInsert.jpg) <br>
 想象一下，有个圆圆的轮子绕着矩形滚一圈，圆心的坐标，是不是就是边界条件？<br>
 那么，假设矩形中心在坐标原点的情况下，<br>
 1、当圆在拐角时的边界： `|BG| = r`  即  `x^2 + y^2 = r^2`  那么要相交也就是   `x^2 + y^2 < r^2` <br>
@@ -55,7 +55,7 @@ public static bool CheckCircleRectInsert1(Vector2 rectPos, Vector2 halfSize, Vec
 这个方法巧妙地运用了矩形的对称性质。<br>
 其实，如果理解了第一种方法，方法2也就不难理解了。想象一下，类似折纸，由于矩形的对称性，可以把任意位置的圆对称到矩形的右上方（当然，也可能是正上方，正右方，或者中心）。而这个处理过程也很简单，算出矩形中心指向圆心的向量`v`，只要对`x`, `y`取绝对值即可。<br>
 如下图2：<br>
-![图2：圆与矩形关系的向量表示](CircleRectInsert2.png)<br>
+![图2：圆与矩形关系的向量表示](CircleRectInsert2.jpg)<br>
 本质上，该方法，也是分三种情况来理解：<br>
 1、当圆在拐角时，向量`v - h`得到的向量`u`的模就是顶点到圆心的距离，所以，`|u| < r`即是相交 <br>
 2、当圆在矩形上方\下方时，边界值也是矩形的宽的一半加上圆的半径。这里可以忽略`u`的`x`，那么`|u|`就是圆心到矩形边的距离了，所以，`|u| < r`即是相交 <br>
@@ -80,9 +80,9 @@ public static bool CheckCircleRectInsert2(Vector2 rectPos, Vector2 halfSize, Vec
 把圆心变换到矩形的局部空间（以矩形中心为原点，坐标轴平行于矩形的边）。<br>
 这样，接着用上面的方法判断就好了。<br>
 变换矩阵的构造就简单上个图，如图3：<br>
-![图3：二维空间中的旋转矩阵](20220917164345.jpg)  <br>
 截图来自闫令琪大神的课件：
 [GAMES101 现代计算机图形学入门](https://www.bilibili.com/video/BV1X7411F744?p=3&spm_id_from=333.1007.top_right_bar_window_history.content.click&vd_source=9ac312e492d54319bc438327ffb04b0c)  <br>
+![图3：二维空间中的旋转矩阵](20220917164345.jpg)  <br>
 ```public static Matrix3x3 Get2DTRMatrix(Vector2 pos, float rot)
 {
     var cos = Mathf.Cos(Mathf.Deg2Rad * rot);
@@ -118,7 +118,7 @@ public static bool CheckCircleRectRotInsert(Vector2 rectPos,  Vector2 halfSize, 
 ```
 而对于方法2，还有另一种方法。<br>
 因为向量有和位置无关的天然优势，所以只考虑旋转就好了。既然矩形旋转了，就想办法把它旋回去，也就是反向旋转相同的角度。把矩形中心指向圆心的向量也跟着旋转，就转换成了未旋转时的情况。如下图4：<br>
-![图4：矩形指向圆心的向量伴随矩形一起旋转](CircleRectInsertRot.png)<br>
+![图4：矩形指向圆心的向量伴随矩形一起旋转](CircleRectInsertRot.jpg)<br>
 ```CS
 public static bool CheckCircleRectRotInsert2(Vector2 rectPos, Vector2 halfSize, float rectRot, Vector2 circlePos, float radius)
 {
@@ -132,4 +132,6 @@ public static bool CheckCircleRectRotInsert2(Vector2 rectPos, Vector2 halfSize, 
 注意：旋转的时候，分清是基于哪条轴做旋转。拎不清的话，很容易懵逼。<br>
 Unity使用的世界是左手坐标系，如下图5：<br>
 在绕Z轴旋转时，是逆时针的，而绕X、Y轴旋转时是顺时针的。<br>
-![图5：左手系的旋转](left-half_coordinate_system.png)
+![图5：左手系的旋转](left-half_coordinate_system.jpg)<br>
+
+[相关工程github](https://github.com/alexuhui/algorithm)
