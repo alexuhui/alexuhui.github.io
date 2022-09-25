@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://alexuhui.github.io/2022/09/25/math-rect-circle-intersect/</loc>
+    
+    <lastmod>2022-09-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://alexuhui.github.io/about/index.html</loc>
     
     <lastmod>2022-09-23</lastmod>
@@ -19,6 +28,55 @@
   </url>
 
   
+  <url>
+    <loc>https://alexuhui.github.io/tags/%E6%95%B0%E5%AD%A6/</loc>
+    <lastmod>2022-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexuhui.github.io/tags/%E5%87%A0%E4%BD%95/</loc>
+    <lastmod>2022-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexuhui.github.io/tags/%E7%9F%A9%E5%BD%A2/</loc>
+    <lastmod>2022-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexuhui.github.io/tags/%E5%9C%86/</loc>
+    <lastmod>2022-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexuhui.github.io/tags/%E7%9B%B8%E4%BA%A4/</loc>
+    <lastmod>2022-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
 
+  
+  <url>
+    <loc>https://alexuhui.github.io/categories/%E6%95%B0%E5%AD%A6/</loc>
+    <lastmod>2022-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexuhui.github.io/categories/%E6%95%B0%E5%AD%A6/%E5%87%A0%E4%BD%95/</loc>
+    <lastmod>2022-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
   
 </urlset>
