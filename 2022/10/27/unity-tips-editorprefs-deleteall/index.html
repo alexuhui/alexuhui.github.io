@@ -16,30 +16,28 @@
   <meta name="author" content="迁乔">
   <meta name="keywords" content="">
   
-    <meta name="description" content="1.边和坐标轴平行的矩形和圆相交的情况方法1：通过找到相交和相离的边界条件。再推广到一般情况。这种方法很直觉，很好理解。如下图1： 想象一下，有个圆圆的轮子绕着矩形滚一圈，圆心的坐标，是不是就是边界条件？那么，假设矩形中心在坐标原点的情况下，1、当圆在拐角时的边界： |BG| &#x3D; r  即  x^2 + y^2 &#x3D; r^2  那么要相交也就是   x^2 + y^2 &lt; r^2 拐角必然是离">
+    <meta name="description" content="在使用EditorPrefs相关API时需要谨慎，特别是EditorPrefs.DeleteAll()因为Unity编辑器的本地配置信息就保存在EditorPrefs里在不知情的情况下调用了EditorPrefs.DeleteAll()API，可能会出现一些意想不到的问题。比如：C#不自动编译了！自宝义的SDK路径丢失了！ 总之，有点抓狂！">
 <meta property="og:type" content="article">
-<meta property="og:title" content="判断圆与矩形相交">
-<meta property="og:url" content="https://alexuhui.github.io/2022/09/25/math-rect-circle-intersect/index.html">
+<meta property="og:title" content="谨慎使用EditorPrefs.DeleteAll()">
+<meta property="og:url" content="https://alexuhui.github.io/2022/10/27/unity-tips-editorprefs-deleteall/index.html">
 <meta property="og:site_name" content="迁乔的博客">
-<meta property="og:description" content="1.边和坐标轴平行的矩形和圆相交的情况方法1：通过找到相交和相离的边界条件。再推广到一般情况。这种方法很直觉，很好理解。如下图1： 想象一下，有个圆圆的轮子绕着矩形滚一圈，圆心的坐标，是不是就是边界条件？那么，假设矩形中心在坐标原点的情况下，1、当圆在拐角时的边界： |BG| &#x3D; r  即  x^2 + y^2 &#x3D; r^2  那么要相交也就是   x^2 + y^2 &lt; r^2 拐角必然是离">
+<meta property="og:description" content="在使用EditorPrefs相关API时需要谨慎，特别是EditorPrefs.DeleteAll()因为Unity编辑器的本地配置信息就保存在EditorPrefs里在不知情的情况下调用了EditorPrefs.DeleteAll()API，可能会出现一些意想不到的问题。比如：C#不自动编译了！自宝义的SDK路径丢失了！ 总之，有点抓狂！">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://alexuhui.github.io/posts_img/unity_math.jpg">
-<meta property="article:published_time" content="2022-09-25T09:50:35.000Z">
-<meta property="article:modified_time" content="2022-10-27T15:22:01.384Z">
+<meta property="og:image" content="https://alexuhui.github.io/posts_img/unity_tips.jpg">
+<meta property="article:published_time" content="2022-10-27T15:50:56.000Z">
+<meta property="article:modified_time" content="2022-10-27T16:08:43.415Z">
 <meta property="article:author" content="迁乔">
-<meta property="article:tag" content="数学">
-<meta property="article:tag" content="几何">
-<meta property="article:tag" content="矩形">
-<meta property="article:tag" content="圆">
-<meta property="article:tag" content="相交">
+<meta property="article:tag" content="Unity">
+<meta property="article:tag" content="tips">
+<meta property="article:tag" content="小贴士">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://alexuhui.github.io/posts_img/unity_math.jpg">
+<meta name="twitter:image" content="https://alexuhui.github.io/posts_img/unity_tips.jpg">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>判断圆与矩形相交 - 迁乔的博客</title>
+  <title>谨慎使用EditorPrefs.DeleteAll() - 迁乔的博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -211,13 +209,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/posts_img/math-rect-circle-intersect/banner.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('/posts_img/unity-tips-editorprefs-deleteall/banner.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle">判断圆与矩形相交</span>
+            <span id="subtitle">谨慎使用EditorPrefs.DeleteAll()</span>
           
         </div>
 
@@ -233,8 +231,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-09-25 17:50" pubdate>
-          2022年9月25日 下午
+        <time datetime="2022-10-27 23:50" pubdate>
+          2022年10月27日 晚上
         </time>
       </span>
     
@@ -245,7 +243,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.6k 字
+          170 字
         
       </span>
     
@@ -256,7 +254,7 @@
         
         
         
-          30 分钟
+          2 分钟
         
       </span>
     
@@ -312,25 +310,13 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">判断圆与矩形相交</h1>
+            <h1 style="display: none">谨慎使用EditorPrefs.DeleteAll()</h1>
             
             
               <div class="markdown-body">
                 
-                <h3 id="1-边和坐标轴平行的矩形和圆相交的情况"><a href="#1-边和坐标轴平行的矩形和圆相交的情况" class="headerlink" title="1.边和坐标轴平行的矩形和圆相交的情况"></a>1.边和坐标轴平行的矩形和圆相交的情况</h3><h4 id="方法1：通过找到相交和相离的边界条件。再推广到一般情况。"><a href="#方法1：通过找到相交和相离的边界条件。再推广到一般情况。" class="headerlink" title="方法1：通过找到相交和相离的边界条件。再推广到一般情况。"></a>方法1：通过找到相交和相离的边界条件。再推广到一般情况。<br></h4><p>这种方法很直觉，很好理解。如下图1：<br><br><img src="/2022/09/25/math-rect-circle-intersect/CircleRectInsert.jpg" srcset="/img/loading.gif" lazyload alt="图1：圆与矩形关系边界条件"> <br><br>想象一下，有个圆圆的轮子绕着矩形滚一圈，圆心的坐标，是不是就是边界条件？<br><br>那么，假设矩形中心在坐标原点的情况下，<br><br>1、当圆在拐角时的边界： <code>|BG| = r</code>  即  <code>x^2 + y^2 = r^2</code>  那么要相交也就是   <code>x^2 + y^2 &lt; r^2</code> <br><br>拐角必然是离圆心最近的顶点，分别找出离圆心最近的x,y值，即可根据<code>x^2 + y^2 &lt; r^2</code>判断。 <br><br>2、当圆在矩形上方时： <code>|EF| = r</code> 即  <code>y - halfH = r</code>  那么相交就是 <code>y &lt; r + halfH</code> ;  <br><br>显然，当圆在矩形下方时， <code>-y &lt; r + halfH</code>; <br><br>另外，圆在矩形上方&#x2F;下方的充要条件是 <code>- halfW &lt; x &lt; halfW</code> 即  <code>|x| &lt; halfW</code> <br><br>3、当圆在在两侧时，和上下思路一样。<br><br>综上，<br><br>假设矩形中心点rectPos，长宽的一半halfSize，圆心circlePos，半径radius: <br></p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs CS"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">bool</span> <span class="hljs-title">CheckCircleRectInsert1</span>(<span class="hljs-params">Vector2 rectPos, Vector2 halfSize, Vector2 circlePos, <span class="hljs-built_in">float</span> radius</span>)</span><br>&#123;<br>    <span class="hljs-comment">//条件1 拐角</span><br>    <span class="hljs-built_in">float</span> minx, miny;<br>    <span class="hljs-comment">//找出离圆心最近的顶点的x值</span><br>    minx = Mathf.Min(Mathf.Abs(rectPos.x + halfSize.x - circlePos.x), Mathf.Abs(rectPos.x - halfSize.x - circlePos.x));<br>    <span class="hljs-comment">//找出离圆心最近的顶点的y值</span><br>    miny = Mathf.Min(Mathf.Abs(rectPos.y + halfSize.y - circlePos.y), Mathf.Abs(rectPos.y - halfSize.y - circlePos.y));<br>    <span class="hljs-keyword">if</span> (minx * minx + miny * miny &lt;= radius * radius) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br><br>    <span class="hljs-comment">//条件2 外边  </span><br>    <span class="hljs-built_in">float</span> lenx = Mathf.Abs(rectPos.x - circlePos.x);<br>    <span class="hljs-built_in">float</span> leny = Mathf.Abs(rectPos.y - circlePos.y);<br>    <span class="hljs-keyword">if</span> (lenx &lt; halfSize.x + radius &amp;&amp; leny &lt; halfSize.y)<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    <span class="hljs-keyword">if</span> (leny &lt; halfSize.y + radius &amp;&amp; lenx &lt; halfSize.x)<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-<h4 id="方法2："><a href="#方法2：" class="headerlink" title="方法2："></a>方法2：<br></h4><p>这种方法比较抽象，可参考<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/24251545">知乎答案</a> <br><br>这个方法巧妙地运用了矩形的对称性质。<br><br>其实，如果理解了第一种方法，方法2也就不难理解了。想象一下，类似折纸，由于矩形的对称性，可以把任意位置的圆对称到矩形的右上方（当然，也可能是正上方，正右方，或者中心）。而这个处理过程也很简单，算出矩形中心指向圆心的向量<code>v</code>，只要对<code>x</code>, <code>y</code>取绝对值即可。<br><br>如下图2：<br><br><img src="/2022/09/25/math-rect-circle-intersect/CircleRectInsert2.jpg" srcset="/img/loading.gif" lazyload alt="图2：圆与矩形关系的向量表示"><br><br>本质上，该方法，也是分三种情况来理解：<br><br>1、当圆在拐角时，向量<code>v - h</code>得到的向量<code>u</code>的模就是顶点到圆心的距离，所以，<code>|u| &lt; r</code>即是相交 <br><br>2、当圆在矩形上方\下方时，边界值也是矩形的宽的一半加上圆的半径。这里可以忽略<code>u</code>的<code>x</code>，那么<code>|u|</code>就是圆心到矩形边的距离了，所以，<code>|u| &lt; r</code>即是相交 <br><br>3、当圆在在两侧时，和上下思路一样。<br><br>综上，方法运用向量把各种情况统一了起来：<br><br>假设矩形中心点rectPos，长宽的一半halfSize，圆心circlePos，半径radius: <br></p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs CS"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">bool</span> <span class="hljs-title">CheckCircleRectInsert2</span>(<span class="hljs-params">Vector2 rectPos, Vector2 halfSize, Vector2 circlePos, <span class="hljs-built_in">float</span> radius</span>)</span><br> &#123;<br>     <span class="hljs-comment">// 第1步：转换至第1象限</span><br>     Vector2 v = <span class="hljs-keyword">new</span> Vector2(Mathf.Abs(rectPos.x - circlePos.x), Mathf.Abs(rectPos.y - circlePos.y));<br>     <span class="hljs-comment">//第2步：求圆心至矩形的最短距离矢量</span><br>     Vector2 u = Vector2.Max(v - halfSize, Vector2.zero);<br>     <span class="hljs-comment">// 第3步：长度平方与半径平方比较</span><br>     <span class="hljs-keyword">return</span> Vector2.Dot(u, u) &lt;= radius * radius;<br> &#125;<br></code></pre></td></tr></table></figure>
-
-<h3 id="2-边和坐标轴不平行的矩形和圆相交的情况"><a href="#2-边和坐标轴不平行的矩形和圆相交的情况" class="headerlink" title="2.边和坐标轴不平行的矩形和圆相交的情况"></a>2.边和坐标轴不平行的矩形和圆相交的情况</h3><p>接下来，看看当矩形可能发生旋转的情况。<br><br>当矩形发生旋转后，一种很自然的想法就是：<br><br>把圆心变换到矩形的局部空间（以矩形中心为原点，坐标轴平行于矩形的边）。<br><br>这样，接着用上面的方法判断就好了。<br><br>变换矩阵的构造就简单上个图，如图3：<br><br>截图来自闫令琪大神的课件：<br><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1X7411F744?p=3&spm_id_from=333.1007.top_right_bar_window_history.content.click&vd_source=9ac312e492d54319bc438327ffb04b0c">GAMES101 现代计算机图形学入门</a>  <br><br><img src="/2022/09/25/math-rect-circle-intersect/20220917164345.jpg" srcset="/img/loading.gif" lazyload alt="图3：二维空间中的旋转矩阵">  <br></p>
-<figure class="highlight plaintext"><figcaption><span>static Matrix3x3 Get2DTRMatrix(Vector2 pos, float rot)</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs public">&#123;<br>    var cos = Mathf.Cos(Mathf.Deg2Rad * rot);<br>    var sin = Mathf.Sin(Mathf.Deg2Rad * rot);<br>	// 按行构建位移旋转变换矩阵（这里忽略了缩放）<br>    var row0 = new Vector3(cos, -sin, pos.x);<br>    var row1 = new Vector3(sin, cos, pos.y);<br>    var row2 = new Vector3(0, 0, 1);<br>    Matrix3x3 matrix = Matrix3x3.CreateFromRows(row0, row1, row2).Inverse();<br>    return matrix;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p><code>TODO  为什么要求逆才对呢？</code><br></p>
-<p>假设矩形中心点rectPos，长宽的一半halfSize，旋转角度为radius，圆心circlePos，半径radius<br></p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs CS"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">bool</span> <span class="hljs-title">CheckCircleRectRotInsert</span>(<span class="hljs-params">Vector2 rectPos,  Vector2 halfSize, <span class="hljs-built_in">float</span> rectRot, Vector2 circlePos, <span class="hljs-built_in">float</span> radius</span>)</span><br>&#123;<br>    <span class="hljs-comment">//按行排列3x3矩阵</span><br>    <span class="hljs-keyword">var</span> mat3x3 = Get2DTRMatrix(rectPos, rectRot);<br>    <span class="hljs-comment">// ----------------</span><br>    <span class="hljs-comment">// [row0]            </span><br>    <span class="hljs-comment">// [row1]    点乘    [circlePos, 1] （转置）</span><br>    <span class="hljs-comment">// [0,0,1]</span><br>    <span class="hljs-built_in">float</span> x = mat3x3.V00 * circlePos.x + mat3x3.V01 * circlePos.y + mat3x3.V02;<br>    <span class="hljs-built_in">float</span> y = mat3x3.V10 * circlePos.x + mat3x3.V11 * circlePos.y + mat3x3.V12;<br>    Vector2 circleLocalPos = <span class="hljs-keyword">new</span> Vector2(x,y);<br><br>    <span class="hljs-comment">// 注意这里转到了矩形本地坐标，那矩形中心点就是(0,0)了</span><br>    <span class="hljs-keyword">return</span> CheckCircleRectInsert1(Vector2.zero, halfSize, circleLocalPos, radius);<br>    <span class="hljs-comment">//return CheckCircleRectInsert2(Vector2.zero, halfSize, circleLocalPos, radius);</span><br>&#125;<br></code></pre></td></tr></table></figure>
-<p>而对于方法2，还有另一种方法。<br><br>因为向量有和位置无关的天然优势，所以只考虑旋转就好了。既然矩形旋转了，就想办法把它旋回去，也就是反向旋转相同的角度。把矩形中心指向圆心的向量也跟着旋转，就转换成了未旋转时的情况。如下图4：<br><br><img src="/2022/09/25/math-rect-circle-intersect/CircleRectInsertRot.jpg" srcset="/img/loading.gif" lazyload alt="图4：矩形指向圆心的向量伴随矩形一起旋转"><br></p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs CS"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">bool</span> <span class="hljs-title">CheckCircleRectRotInsert2</span>(<span class="hljs-params">Vector2 rectPos, Vector2 halfSize, <span class="hljs-built_in">float</span> rectRot, Vector2 circlePos, <span class="hljs-built_in">float</span> radius</span>)</span><br>&#123;<br>    <span class="hljs-keyword">var</span> dir = circlePos - rectPos;<br>    dir = Quaternion.AngleAxis(-rectRot, Vector3.forward) * dir;<br>    <span class="hljs-keyword">var</span> v = Vector2.Max(dir, -dir);<br>    <span class="hljs-keyword">var</span> u = Vector2.Max(v - halfSize, Vector3.zero);<br>    <span class="hljs-keyword">return</span> Vector2.Dot(u, u) &lt;= radius * radius;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>注意：旋转的时候，分清是基于哪条轴做旋转。拎不清的话，很容易懵逼。<br><br>Unity使用的世界是左手坐标系，如下图5：<br><br>在绕Z轴旋转时，是逆时针的，而绕X、Y轴旋转时是顺时针的。<br><br><img src="/2022/09/25/math-rect-circle-intersect/left-half_coordinate_system.jpg" srcset="/img/loading.gif" lazyload alt="图5：左手系的旋转"><br></p>
-<p><a target="_blank" rel="noopener" href="https://github.com/alexuhui/algorithm">相关工程github</a></p>
+                <p>在使用EditorPrefs相关API时需要谨慎，特别是<code>EditorPrefs.DeleteAll()</code><br><br>因为Unity编辑器的本地配置信息就保存在<code>EditorPrefs</code>里<br><br>在不知情的情况下调用了<code>EditorPrefs.DeleteAll()</code>API，可能会出现一些意想不到的问题。<br><br>比如：<br><br>C#不自动编译了！<br><br>自宝义的SDK路径丢失了！<br></p>
+<p>总之，有点抓狂！<br></p>
 
                 
               </div>
@@ -349,12 +335,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E6%95%B0%E5%AD%A6/" class="category-chain-item">数学</a>
+  <a href="/categories/Unity/" class="category-chain-item">Unity</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E6%95%B0%E5%AD%A6/%E5%87%A0%E4%BD%95/" class="category-chain-item">几何</a>
+  <a href="/categories/Unity/tips/" class="category-chain-item">tips</a>
   
   
 
@@ -371,15 +357,11 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E6%95%B0%E5%AD%A6/">#数学</a>
+        <a href="/tags/Unity/">#Unity</a>
       
-        <a href="/tags/%E5%87%A0%E4%BD%95/">#几何</a>
+        <a href="/tags/tips/">#tips</a>
       
-        <a href="/tags/%E7%9F%A9%E5%BD%A2/">#矩形</a>
-      
-        <a href="/tags/%E5%9C%86/">#圆</a>
-      
-        <a href="/tags/%E7%9B%B8%E4%BA%A4/">#相交</a>
+        <a href="/tags/%E5%B0%8F%E8%B4%B4%E5%A3%AB/">#小贴士</a>
       
     </div>
   
@@ -391,8 +373,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>判断圆与矩形相交</div>
-      <div>https://alexuhui.github.io/2022/09/25/math-rect-circle-intersect/</div>
+      <div>谨慎使用EditorPrefs.DeleteAll()</div>
+      <div>https://alexuhui.github.io/2022/10/27/unity-tips-editorprefs-deleteall/</div>
     </div>
     <div class="license-meta">
       
@@ -404,7 +386,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年9月25日</div>
+          <div>2022年10月27日</div>
         </div>
       
       
@@ -448,15 +430,15 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/10/27/unity-tips-editorprefs-deleteall/" title="谨慎使用EditorPrefs.DeleteAll()">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">谨慎使用EditorPrefs.DeleteAll()</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
+                    
+                      <a href="/2022/09/25/math-rect-circle-intersect/" title="判断圆与矩形相交">
+                        <span class="hidden-mobile">判断圆与矩形相交</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
                     
                   </article>
                 </div>
@@ -514,17 +496,17 @@
     
     <div class="category row nomargin-x">
       <a class="category-item 
-          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="数学"
-        id="heading-6e65831863dbf272b7a65cd8df1a440d" role="tab" data-toggle="collapse" href="#collapse-6e65831863dbf272b7a65cd8df1a440d"
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="Unity"
+        id="heading-82dd98f1d663acc318e6a8ec4ab69b7a" role="tab" data-toggle="collapse" href="#collapse-82dd98f1d663acc318e6a8ec4ab69b7a"
         aria-expanded="true"
       >
-        数学
+        Unity
         <span class="list-group-count">(1)</span>
         <i class="iconfont icon-arrowright"></i>
       </a>
       
-      <div class="category-collapse collapse show" id="collapse-6e65831863dbf272b7a65cd8df1a440d"
-           role="tabpanel" aria-labelledby="heading-6e65831863dbf272b7a65cd8df1a440d">
+      <div class="category-collapse collapse show" id="collapse-82dd98f1d663acc318e6a8ec4ab69b7a"
+           role="tabpanel" aria-labelledby="heading-82dd98f1d663acc318e6a8ec4ab69b7a">
         
         
           
@@ -541,17 +523,17 @@
     
     <div class="category-sub row nomargin-x">
       <a class="category-subitem 
-          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="几何"
-        id="heading-0b5e7f199500356627971c8a4d5d3cd2" role="tab" data-toggle="collapse" href="#collapse-0b5e7f199500356627971c8a4d5d3cd2"
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="tips"
+        id="heading-e4c9479b11955648dad558fe717a4eb2" role="tab" data-toggle="collapse" href="#collapse-e4c9479b11955648dad558fe717a4eb2"
         aria-expanded="true"
       >
-        几何
+        tips
         <span class="list-group-count">(1)</span>
         <i class="iconfont icon-arrowright"></i>
       </a>
       
-      <div class="category-collapse collapse show" id="collapse-0b5e7f199500356627971c8a4d5d3cd2"
-           role="tabpanel" aria-labelledby="heading-0b5e7f199500356627971c8a4d5d3cd2">
+      <div class="category-collapse collapse show" id="collapse-e4c9479b11955648dad558fe717a4eb2"
+           role="tabpanel" aria-labelledby="heading-e4c9479b11955648dad558fe717a4eb2">
         
         
           
@@ -560,10 +542,10 @@
     
       
       
-        <a href="/2022/09/25/math-rect-circle-intersect/" title="判断圆与矩形相交"
+        <a href="/2022/10/27/unity-tips-editorprefs-deleteall/" title="谨慎使用EditorPrefs.DeleteAll()"
            class="list-group-item list-group-item-action
            active">
-          <span class="category-post">判断圆与矩形相交</span>
+          <span class="category-post">谨慎使用EditorPrefs.DeleteAll()</span>
         </a>
       
     

@@ -1,3 +1,4 @@
+https://alexuhui.github.io/2022/10/27/unity-tips-editorprefs-deleteall/
 https://alexuhui.github.io/2022/09/25/math-rect-circle-intersect/
 https://alexuhui.github.io/about/index.html
 https://alexuhui.github.io/
@@ -6,5 +7,10 @@ https://alexuhui.github.io/tags/%E5%87%A0%E4%BD%95/
 https://alexuhui.github.io/tags/%E7%9F%A9%E5%BD%A2/
 https://alexuhui.github.io/tags/%E5%9C%86/
 https://alexuhui.github.io/tags/%E7%9B%B8%E4%BA%A4/
+https://alexuhui.github.io/tags/Unity/
+https://alexuhui.github.io/tags/tips/
+https://alexuhui.github.io/tags/%E5%B0%8F%E8%B4%B4%E5%A3%AB/
 https://alexuhui.github.io/categories/%E6%95%B0%E5%AD%A6/
+https://alexuhui.github.io/categories/Unity/
 https://alexuhui.github.io/categories/%E6%95%B0%E5%AD%A6/%E5%87%A0%E4%BD%95/
+https://alexuhui.github.io/categories/Unity/tips/
