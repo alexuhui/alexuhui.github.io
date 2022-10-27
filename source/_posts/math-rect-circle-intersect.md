@@ -1,6 +1,6 @@
 ---
 title: 判断圆与矩形相交
-index_img: /posts_img/math-rect-circle-intersect/index.jpg
+index_img: /posts_img/unity_math.jpg
 banner_img: /posts_img/math-rect-circle-intersect/banner.jpg
 categories:
   - 数学

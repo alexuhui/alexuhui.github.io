@@ -1,12 +1,15 @@
 ---
 title: {{ title }}
 date: {{ date }}
-index_img: /posts_img/unity_math.jpg
+index_img: /posts_img/unity_tips.jpg
 banner_img: /posts_img/{{ title }}/banner.jpg
 categories:
-- 数学
+- Unity
+- tips
 tags: 
-- 数学
+- Unity
+- tips
+- 小贴士 
 ---
 ### 1.标题1
 ***
