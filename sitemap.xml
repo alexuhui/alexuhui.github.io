@@ -2,9 +2,9 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://alexuhui.github.io/2022/09/22/test-article/</loc>
+    <loc>https://alexuhui.github.io/2022/09/25/math-rect-circle-intersect/</loc>
     
-    <lastmod>2022-09-23</lastmod>
+    <lastmod>2022-09-25</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -19,27 +19,46 @@
     <priority>0.6</priority>
   </url>
   
-  <url>
-    <loc>https://alexuhui.github.io/2022/09/20/hello-world/</loc>
-    
-    <lastmod>2022-09-20</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
 
   <url>
     <loc>https://alexuhui.github.io/</loc>
-    <lastmod>2022-09-23</lastmod>
+    <lastmod>2022-09-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
   
   <url>
-    <loc>https://alexuhui.github.io/tags/%E6%B5%8B%E8%AF%95%E7%9A%84/</loc>
-    <lastmod>2022-09-23</lastmod>
+    <loc>https://alexuhui.github.io/tags/%E6%95%B0%E5%AD%A6/</loc>
+    <lastmod>2022-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexuhui.github.io/tags/%E5%87%A0%E4%BD%95/</loc>
+    <lastmod>2022-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexuhui.github.io/tags/%E7%9F%A9%E5%BD%A2/</loc>
+    <lastmod>2022-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexuhui.github.io/tags/%E5%9C%86/</loc>
+    <lastmod>2022-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexuhui.github.io/tags/%E7%9B%B8%E4%BA%A4/</loc>
+    <lastmod>2022-09-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -47,22 +66,15 @@
 
   
   <url>
-    <loc>https://alexuhui.github.io/categories/Diary/</loc>
-    <lastmod>2022-09-23</lastmod>
+    <loc>https://alexuhui.github.io/categories/%E6%95%B0%E5%AD%A6/</loc>
+    <lastmod>2022-09-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://alexuhui.github.io/categories/Diary/pp/</loc>
-    <lastmod>2022-09-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://alexuhui.github.io/categories/Diary/pp/cc/</loc>
-    <lastmod>2022-09-23</lastmod>
+    <loc>https://alexuhui.github.io/categories/%E6%95%B0%E5%AD%A6/%E5%87%A0%E4%BD%95/</loc>
+    <lastmod>2022-09-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
