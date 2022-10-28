@@ -5,7 +5,7 @@ index_img: /posts_img/unity_tips.jpg
 banner_img: /posts_img/{{ title }}/banner.jpg
 categories:
 - Unity
-- tips
+- 小贴士
 tags: 
 - Unity
 - tips

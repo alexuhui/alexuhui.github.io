@@ -5,11 +5,11 @@ index_img: /posts_img/unity_tips.jpg
 banner_img: /posts_img/unity-tips-editorprefs-deleteall/banner.jpg
 categories:
 - Unity
-- tips
+- 小贴士
 tags: 
 - Unity
 - tips
-- 小贴士 
+- 小贴士
 ---
 
 在使用EditorPrefs相关API时需要谨慎，特别是`EditorPrefs.DeleteAll()`<br>
