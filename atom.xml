@@ -6,7 +6,7 @@
   <link href="https://alexuhui.github.io/atom.xml" rel="self"/>
   
   <link href="https://alexuhui.github.io/"/>
-  <updated>2022-10-27T16:08:43.415Z</updated>
+  <updated>2022-10-28T15:20:01.762Z</updated>
   <id>https://alexuhui.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://alexuhui.github.io/2022/10/27/unity-tips-editorprefs-deleteall/"/>
     <id>https://alexuhui.github.io/2022/10/27/unity-tips-editorprefs-deleteall/</id>
     <published>2022-10-27T15:50:56.000Z</published>
-    <updated>2022-10-27T16:08:43.415Z</updated>
+    <updated>2022-10-28T15:20:01.762Z</updated>
     
     <content type="html"><![CDATA[<p>在使用EditorPrefs相关API时需要谨慎，特别是<code>EditorPrefs.DeleteAll()</code><br><br>因为Unity编辑器的本地配置信息就保存在<code>EditorPrefs</code>里<br><br>在不知情的情况下调用了<code>EditorPrefs.DeleteAll()</code>API，可能会出现一些意想不到的问题。<br><br>比如：<br><br>C#不自动编译了！<br><br>自宝义的SDK路径丢失了！<br></p><p>总之，有点抓狂！<br></p>]]></content>
     
@@ -35,7 +35,7 @@
     
     <category term="Unity" scheme="https://alexuhui.github.io/categories/Unity/"/>
     
-    <category term="tips" scheme="https://alexuhui.github.io/categories/Unity/tips/"/>
+    <category term="小贴士" scheme="https://alexuhui.github.io/categories/Unity/%E5%B0%8F%E8%B4%B4%E5%A3%AB/"/>
     
     
     <category term="Unity" scheme="https://alexuhui.github.io/tags/Unity/"/>
