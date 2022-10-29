@@ -2,7 +2,7 @@
 title: 谨慎使用EditorPrefs.DeleteAll()
 date: 2022-10-27 23:50:56
 index_img: /posts_img/unity_tips.jpg
-banner_img: /posts_img/unity-tips-editorprefs-deleteall/banner.jpg
+banner_img: /posts_img/unity-tips-editorprefs-deleteall/banner.webp
 categories:
 - Unity
 - 小贴士
