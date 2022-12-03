@@ -1,7 +1,7 @@
 ---
 title: shader中使用_Time做动效时需要小心精度问题
 index_img: /posts_img/unity_tips.jpg
-banner_img: /posts_img/shader中使用_Time做动效时需要小心精度问题/banner.jpg
+banner_img: /posts_img/shader中使用-Time做动效时需要小心精度问题/banner.jpg
 categories:
   - Unity
   - 小贴士
