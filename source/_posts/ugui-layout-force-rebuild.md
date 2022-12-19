@@ -1,7 +1,7 @@
 ---
 title: 强制重建UGUI布局
 index_img: /posts_img/unity_tips.jpg
-banner_img: /posts_img/ugui layout force rebuild/banner.webp
+banner_img: /posts_img/ugui-layout-force-rebuild/banner.webp
 categories:
   - Unity
   - 小贴士
