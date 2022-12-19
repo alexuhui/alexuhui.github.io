@@ -4,6 +4,41 @@
   
   
   <entry>
+    <title>强制重建UGUI布局</title>
+    <link href="/2022/12/19/ugui-layout-force-rebuild/"/>
+    <url>/2022/12/19/ugui-layout-force-rebuild/</url>
+    
+    <content type="html"><![CDATA[<h3 id="1-什么是重建"><a href="#1-什么是重建" class="headerlink" title="1.什么是重建"></a>1.什么是重建</h3><hr><p>重建就是ui元素发生改变后，重新构建UI网格。UGUI的布局组件在内容发生改变后，调用<code>SetDirty()</code>，通过<code>LayoutRebuilder</code>类的静态方法<code>MarkLayoutForRebuild(RectTransform rect)</code>，标记需要重建的<code>RectTransform</code>。标记对象最终会保存在<code>CanvasUpdateRegistry</code>的重建队列<code>m_LayoutRebuildQueue</code>里，并在<code>PerformUpdate（）</code>函数里完成重建。</p><h3 id="2-为什么要强制重建"><a href="#2-为什么要强制重建" class="headerlink" title="2.为什么要强制重建"></a>2.为什么要强制重建</h3><hr><p>有的时候，自己的逻辑里面可能会需要使用ui的大小或者位置数据去手动计算UI布局，这个时候，就有可能由于UGUI布局刷新不及时，导致我们拿到的实际上是刷新之前的数据，从而导致错误。比如，自己实现的虚拟列表，需要根据列表的每个Item的Size计算Item的坐标。如果每个item的大小不一样，而且大小根据item要显示的内容动态改变。这个时候，如果不能保证自己的计算逻辑在系统重建之后进行，就拿错误的参数进行计算从而导致异常。</p><h3 id="3-怎么强制重建"><a href="#3-怎么强制重建" class="headerlink" title="3.怎么强制重建"></a>3.怎么强制重建</h3><hr><p>调用<code>LayoutRebuilder</code>类的静态方法<code>ForceRebuildLayoutImmediate(RectTransform layoutRoot)</code>即可！</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Unity</category>
+      
+      <category>小贴士</category>
+      
+      <category>UGUI</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Unity</tag>
+      
+      <tag>tips</tag>
+      
+      <tag>小贴士</tag>
+      
+      <tag>UGUI</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>shader中使用_Time做动效时需要小心精度问题</title>
     <link href="/2022/12/03/shader%E4%B8%AD%E4%BD%BF%E7%94%A8-Time%E5%81%9A%E5%8A%A8%E6%95%88%E6%97%B6%E9%9C%80%E8%A6%81%E5%B0%8F%E5%BF%83%E7%B2%BE%E5%BA%A6%E9%97%AE%E9%A2%98/"/>
     <url>/2022/12/03/shader%E4%B8%AD%E4%BD%BF%E7%94%A8-Time%E5%81%9A%E5%8A%A8%E6%95%88%E6%97%B6%E9%9C%80%E8%A6%81%E5%B0%8F%E5%BF%83%E7%B2%BE%E5%BA%A6%E9%97%AE%E9%A2%98/</url>
