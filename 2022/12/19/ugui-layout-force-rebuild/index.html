@@ -16,22 +16,21 @@
   <meta name="author" content="迁乔">
   <meta name="keywords" content="">
   
-    <meta name="description" content="1.关于Unity Shader中时间相关的相关变量 1.Unity中设置了4个时间相关的变量注意：这里的t,是指场景（Scene）加载以来的时间，那么在场景加载时间比较长之后，就可能出现浮点精度不足的情况。 2.关于基于时间变化实现的动效卡顿的问题基于时间_Time在shader实现的动效，可能运行时间久了，会出现画面一卡一顿的问题。大部分情况下，是因为时间精度不够用了。而这种情况，经常是在PC">
+    <meta name="description" content="1.什么是重建 重建就是ui元素发生改变后，重新构建UI网格。UGUI的布局组件在内容发生改变后，调用SetDirty()，通过LayoutRebuilder类的静态方法MarkLayoutForRebuild(RectTransform rect)，标记需要重建的RectTransform。标记对象最终会保存在CanvasUpdateRegistry的重建队列m_LayoutRebuildQue">
 <meta property="og:type" content="article">
-<meta property="og:title" content="shader中使用_Time做动效时需要小心精度问题">
-<meta property="og:url" content="https://alexuhui.github.io/2022/12/03/shader%E4%B8%AD%E4%BD%BF%E7%94%A8-Time%E5%81%9A%E5%8A%A8%E6%95%88%E6%97%B6%E9%9C%80%E8%A6%81%E5%B0%8F%E5%BF%83%E7%B2%BE%E5%BA%A6%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:title" content="强制重建UGUI布局">
+<meta property="og:url" content="https://alexuhui.github.io/2022/12/19/ugui-layout-force-rebuild/index.html">
 <meta property="og:site_name" content="迁乔的博客">
-<meta property="og:description" content="1.关于Unity Shader中时间相关的相关变量 1.Unity中设置了4个时间相关的变量注意：这里的t,是指场景（Scene）加载以来的时间，那么在场景加载时间比较长之后，就可能出现浮点精度不足的情况。 2.关于基于时间变化实现的动效卡顿的问题基于时间_Time在shader实现的动效，可能运行时间久了，会出现画面一卡一顿的问题。大部分情况下，是因为时间精度不够用了。而这种情况，经常是在PC">
+<meta property="og:description" content="1.什么是重建 重建就是ui元素发生改变后，重新构建UI网格。UGUI的布局组件在内容发生改变后，调用SetDirty()，通过LayoutRebuilder类的静态方法MarkLayoutForRebuild(RectTransform rect)，标记需要重建的RectTransform。标记对象最终会保存在CanvasUpdateRegistry的重建队列m_LayoutRebuildQue">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://alexuhui.github.io/posts_img/unity_tips.jpg">
-<meta property="article:published_time" content="2022-12-03T14:20:16.000Z">
-<meta property="article:modified_time" content="2022-12-19T14:14:02.415Z">
+<meta property="article:published_time" content="2022-12-19T14:12:28.000Z">
+<meta property="article:modified_time" content="2022-12-19T15:07:39.969Z">
 <meta property="article:author" content="迁乔">
 <meta property="article:tag" content="Unity">
 <meta property="article:tag" content="tips">
 <meta property="article:tag" content="小贴士">
-<meta property="article:tag" content="shader">
-<meta property="article:tag" content="_Time">
+<meta property="article:tag" content="UGUI">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://alexuhui.github.io/posts_img/unity_tips.jpg">
   
@@ -39,7 +38,7 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>shader中使用_Time做动效时需要小心精度问题 - 迁乔的博客</title>
+  <title>强制重建UGUI布局 - 迁乔的博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -211,13 +210,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/posts_img/shader%E4%B8%AD%E4%BD%BF%E7%94%A8-Time%E5%81%9A%E5%8A%A8%E6%95%88%E6%97%B6%E9%9C%80%E8%A6%81%E5%B0%8F%E5%BF%83%E7%B2%BE%E5%BA%A6%E9%97%AE%E9%A2%98/banner.webp') no-repeat center center; background-size: cover;">
+     style="background: url('/posts_img/ugui%20layout%20force%20rebuild/banner.webp') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle">shader中使用_Time做动效时需要小心精度问题</span>
+            <span id="subtitle">强制重建UGUI布局</span>
           
         </div>
 
@@ -233,8 +232,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-12-03 22:20" pubdate>
-          2022年12月3日 晚上
+        <time datetime="2022-12-19 22:12" pubdate>
+          2022年12月19日 晚上
         </time>
       </span>
     
@@ -245,7 +244,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          534 字
+          535 字
         
       </span>
     
@@ -312,14 +311,17 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">shader中使用_Time做动效时需要小心精度问题</h1>
+            <h1 style="display: none">强制重建UGUI布局</h1>
             
             
               <div class="markdown-body">
                 
-                <h3 id="1-关于Unity-Shader中时间相关的相关变量"><a href="#1-关于Unity-Shader中时间相关的相关变量" class="headerlink" title="1.关于Unity Shader中时间相关的相关变量"></a>1.关于Unity Shader中时间相关的相关变量</h3><hr>
-<h4 id="1-Unity中设置了4个时间相关的变量"><a href="#1-Unity中设置了4个时间相关的变量" class="headerlink" title="1.Unity中设置了4个时间相关的变量"></a>1.Unity中设置了4个时间相关的变量</h4><p><img src="/2022/12/03/shader%E4%B8%AD%E4%BD%BF%E7%94%A8-Time%E5%81%9A%E5%8A%A8%E6%95%88%E6%97%B6%E9%9C%80%E8%A6%81%E5%B0%8F%E5%BF%83%E7%B2%BE%E5%BA%A6%E9%97%AE%E9%A2%98/unity_time.png" srcset="/img/loading.gif" lazyload alt="图1：shader中可用的时间变量"><br><br>注意：这里的t,是指场景（Scene）加载以来的时间，那么在场景加载时间比较长之后，就可能出现浮点精度不足的情况。</p>
-<h4 id="2-关于基于时间变化实现的动效卡顿的问题"><a href="#2-关于基于时间变化实现的动效卡顿的问题" class="headerlink" title="2.关于基于时间变化实现的动效卡顿的问题"></a>2.关于基于时间变化实现的动效卡顿的问题</h4><p>基于时间_Time在shader实现的动效，可能运行时间久了，会出现画面一卡一顿的问题。大部分情况下，是因为时间精度不够用了。而这种情况，经常是在PC上难以复现，在手机（特别是低端手机）上容易出现。从经验上说，_Time.x 比 _Time.y “精度更高”。这里说精度更高可能不太准确，但我不知道用什么术语来描述。举个例子，假设现在只用4位（xxxx）来表示一个数，那么，如果是用t来填充，填充到1000秒的时候，小数位就没了，只能一秒一秒的递增了，但是，如果用t&#x2F;20来填充，那么可以到20000（20000&#x2F;20&#x3D;1000）秒的时候，小数位才表达不了。由于小数位越多的时候，动效看上去才会越顺畅。所以如果shader中用的是_Time.y 或者_Time.z甚至是Time.w做的动效，在手机上出现游戏运行一段时间，动效看起来卡顿，但游戏画面本身不怎么掉帧，试试改_Time.x，可能会出现奇迹~</p>
+                <h3 id="1-什么是重建"><a href="#1-什么是重建" class="headerlink" title="1.什么是重建"></a>1.什么是重建</h3><hr>
+<p>重建就是ui元素发生改变后，重新构建UI网格。UGUI的布局组件在内容发生改变后，调用<code>SetDirty()</code>，通过<code>LayoutRebuilder</code>类的静态方法<code>MarkLayoutForRebuild(RectTransform rect)</code>，标记需要重建的<code>RectTransform</code>。标记对象最终会保存在<code>CanvasUpdateRegistry</code>的重建队列<code>m_LayoutRebuildQueue</code>里，并在<code>PerformUpdate（）</code>函数里完成重建。</p>
+<h3 id="2-为什么要强制重建"><a href="#2-为什么要强制重建" class="headerlink" title="2.为什么要强制重建"></a>2.为什么要强制重建</h3><hr>
+<p>有的时候，自己的逻辑里面可能会需要使用ui的大小或者位置数据去手动计算UI布局，这个时候，就有可能由于UGUI布局刷新不及时，导致我们拿到的实际上是刷新之前的数据，从而导致错误。比如，自己实现的虚拟列表，需要根据列表的每个Item的Size计算Item的坐标。如果每个item的大小不一样，而且大小根据item要显示的内容动态改变。这个时候，如果不能保证自己的计算逻辑在系统重建之后进行，就拿错误的参数进行计算从而导致异常。</p>
+<h3 id="3-怎么强制重建"><a href="#3-怎么强制重建" class="headerlink" title="3.怎么强制重建"></a>3.怎么强制重建</h3><hr>
+<p>调用<code>LayoutRebuilder</code>类的静态方法<code>ForceRebuildLayoutImmediate(RectTransform layoutRoot)</code>即可！</p>
 
                 
               </div>
@@ -346,6 +348,13 @@
   <a href="/categories/Unity/%E5%B0%8F%E8%B4%B4%E5%A3%AB/" class="category-chain-item">小贴士</a>
   
   
+    <span>></span>
+    
+  <a href="/categories/Unity/%E5%B0%8F%E8%B4%B4%E5%A3%AB/UGUI/" class="category-chain-item">UGUI</a>
+  
+  
+
+  
 
   
 
@@ -366,9 +375,7 @@
       
         <a href="/tags/%E5%B0%8F%E8%B4%B4%E5%A3%AB/">#小贴士</a>
       
-        <a href="/tags/shader/">#shader</a>
-      
-        <a href="/tags/Time/">#_Time</a>
+        <a href="/tags/UGUI/">#UGUI</a>
       
     </div>
   
@@ -380,8 +387,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>shader中使用_Time做动效时需要小心精度问题</div>
-      <div>https://alexuhui.github.io/2022/12/03/shader中使用-Time做动效时需要小心精度问题/</div>
+      <div>强制重建UGUI布局</div>
+      <div>https://alexuhui.github.io/2022/12/19/ugui-layout-force-rebuild/</div>
     </div>
     <div class="license-meta">
       
@@ -393,7 +400,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年12月3日</div>
+          <div>2022年12月19日</div>
         </div>
       
       
@@ -437,18 +444,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/12/19/ugui-layout-force-rebuild/" title="强制重建UGUI布局">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">强制重建UGUI布局</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/10/27/unity-tips-editorprefs-deleteall/" title="谨慎使用EditorPrefs.DeleteAll()">
-                        <span class="hidden-mobile">谨慎使用EditorPrefs.DeleteAll()</span>
+                      <a href="/2022/12/03/shader%E4%B8%AD%E4%BD%BF%E7%94%A8-Time%E5%81%9A%E5%8A%A8%E6%95%88%E6%97%B6%E9%9C%80%E8%A6%81%E5%B0%8F%E5%BF%83%E7%B2%BE%E5%BA%A6%E9%97%AE%E9%A2%98/" title="shader中使用_Time做动效时需要小心精度问题">
+                        <span class="hidden-mobile">shader中使用_Time做动效时需要小心精度问题</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -558,7 +559,7 @@
       
         <a href="/2022/12/03/shader%E4%B8%AD%E4%BD%BF%E7%94%A8-Time%E5%81%9A%E5%8A%A8%E6%95%88%E6%97%B6%E9%9C%80%E8%A6%81%E5%B0%8F%E5%BF%83%E7%B2%BE%E5%BA%A6%E9%97%AE%E9%A2%98/" title="shader中使用_Time做动效时需要小心精度问题"
            class="list-group-item list-group-item-action
-           active">
+           ">
           <span class="category-post">shader中使用_Time做动效时需要小心精度问题</span>
         </a>
       
@@ -580,17 +581,17 @@
     
     
     <div class="category-sub row nomargin-x">
-      <a class="category-subitem collapsed
+      <a class="category-subitem 
           list-group-item category-item-action col-10 col-md-11 col-xm-11" title="UGUI"
         id="heading-8054c548b58074fb0b72c66b0c843aff" role="tab" data-toggle="collapse" href="#collapse-8054c548b58074fb0b72c66b0c843aff"
-        aria-expanded="false"
+        aria-expanded="true"
       >
         UGUI
         <span class="list-group-count">(1)</span>
         <i class="iconfont icon-arrowright"></i>
       </a>
       
-      <div class="category-collapse collapse " id="collapse-8054c548b58074fb0b72c66b0c843aff"
+      <div class="category-collapse collapse show" id="collapse-8054c548b58074fb0b72c66b0c843aff"
            role="tabpanel" aria-labelledby="heading-8054c548b58074fb0b72c66b0c843aff">
         
         
@@ -602,7 +603,7 @@
       
         <a href="/2022/12/19/ugui-layout-force-rebuild/" title="强制重建UGUI布局"
            class="list-group-item list-group-item-action
-           ">
+           active">
           <span class="category-post">强制重建UGUI布局</span>
         </a>
       
